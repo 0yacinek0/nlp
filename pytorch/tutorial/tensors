@@ -1,0 +1,691 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/0yacinek0/nlp/blob/practice/pytorch/tutorial/tensors\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "9Pze8eMm_lbC"
+      },
+      "source": [
+        "# (ref1) https://pytorch.org/docs/stable/generated/torch.nn.Module.html\n",
+        "# (ref2) https://junstar92.tistory.com/116\n",
+        "# (ref3) https://pytorch.org/tutorials/beginner/basics/intro.html"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "IKv_ytgZ0mZM"
+      },
+      "source": [
+        "### GOOGLE MOUNT"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "i1a7gnZ51a-k",
+        "outputId": "eba66bcf-c799-4189-c50b-69f02604118d"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /content/drive\n"
+          ]
+        }
+      ],
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "wxsMRBoM1ueN",
+        "outputId": "10980d5b-0c0a-4553-fc70-bfb8f8117e62"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'/content'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 2
+        }
+      ],
+      "source": [
+        "pwd"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "qjko_Wxd1fJm",
+        "outputId": "d17338a4-4021-4ee1-ae9c-31d12fc336fb"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "/root\n"
+          ]
+        }
+      ],
+      "source": [
+        "%cd"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "ug0uNDlp1yDz"
+      },
+      "outputs": [],
+      "source": [
+        "ls"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Tensors\n",
+        "* Tensors are a specialized data structure that are very similar to arrays and matrices.\n",
+        "*  to encode the inputs and outputs of a model, as well as the model’s parameters.\n",
+        "* Tensors are similar to NumPy’s ndarrays, except that tensors can run on GPUs or other hardware accelerators. \n"
+      ],
+      "metadata": {
+        "id": "udzwcaFWrCJD"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import torch\n",
+        "import numpy as np"
+      ],
+      "metadata": {
+        "id": "KTAva2w5rs9o"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Initializing a Tensor\n",
+        "* Tensors can be initialized in various ways.\n",
+        " 1. Directly from data\n",
+        " 2. From a NumPy array\n",
+        " 3. From another tensor \n",
+        " 4. With random or constant values "
+      ],
+      "metadata": {
+        "id": "Aok_9_v1rucx"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Directly from data \n",
+        "data = [[1, 2],[3, 4]]\n",
+        "x_data = torch.tensor(data)\n",
+        "print(data, x_data)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "W5C6HvGYsO1K",
+        "outputId": "a43c4702-3305-4e3a-e0a0-5e906fca1008"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[1, 2], [3, 4]] tensor([[1, 2],\n",
+            "        [3, 4]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# From a NumPy array\n",
+        "np_array = np.array(data)\n",
+        "x_np = torch.from_numpy(np_array)\n",
+        "print(np_array, type(np_array), x_np)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "uz1ZsiJ3sRhd",
+        "outputId": "4adffec6-a6ee-4016-be81-f12310d23526"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[[1 2]\n",
+            " [3 4]] <class 'numpy.ndarray'> tensor([[1, 2],\n",
+            "        [3, 4]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# From another tensor - The new tensor retains the properties (shape, datatype) \n",
+        "x_ones = torch.ones_like(x_data)\n",
+        "print(x_data, x_ones)\n",
+        "\n",
+        "x_rand = torch.rand_like(x_data, dtype=torch.float)\n",
+        "print(x_rand)"
+      ],
+      "metadata": {
+        "id": "6UtGENGIsgut",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "d6d7cb5d-308e-40bd-a995-a0bf5bb630e9"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([[1, 2],\n",
+            "        [3, 4]]) tensor([[1, 1],\n",
+            "        [1, 1]])\n",
+            "tensor([[0.5670, 0.5019],\n",
+            "        [0.5141, 0.6081]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# With random or constant values\n",
+        "shape = (2, 3, ) # shape is a tuple of tensor dimensions.\n",
+        "rand_tensor = torch.rand(shape)\n",
+        "ones_tensor = torch.ones(shape)\n",
+        "zeros_tensor = torch.zeros(shape)"
+      ],
+      "metadata": {
+        "id": "2G-Vg1ssvGM3"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(f\"Random Tensor:\\n {rand_tensor} \\n\")\n",
+        "print(f\"Ones Tensor:\\n {ones_tensor} \\n\")\n",
+        "print(f\"Zeros Tensor:\\n {zeros_tensor} \\n\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "d9_lpWb4u52Z",
+        "outputId": "ce78321c-64a0-48f0-d04b-3c6388c160d7"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Random Tensor:\n",
+            " tensor([[0.9325, 0.1655, 0.6307],\n",
+            "        [0.9906, 0.6078, 0.0771]]) \n",
+            "\n",
+            "Ones Tensor:\n",
+            " tensor([[1., 1., 1.],\n",
+            "        [1., 1., 1.]]) \n",
+            "\n",
+            "Zeros Tensor:\n",
+            " tensor([[0., 0., 0.],\n",
+            "        [0., 0., 0.]]) \n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Operations on Tensors\n",
+        "> By default, tensors are created on the CPU. We need to explicitly move tensors to the GPU using .to method (after checking for GPU availability). Keep in mind that copying large tensors across devices can be expensive in terms of time and memory!\n",
+        "\n",
+        "> 1) Standard numpy-like indexing and slicing</br>\n",
+        "> 2) Joining tensors</br>\n",
+        "> 3) Arithmetic operation</br>\n",
+        "> 4) Single-element tensros</br>\n",
+        "> 5) In-place opration</br>"
+      ],
+      "metadata": {
+        "id": "P67imtQ4v_F5"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Pytorch에서 GPU사용하는 3가지 방법 \n",
+        "# https://y-rok.github.io/pytorch/2020/10/03/pytorch-gpu.html "
+      ],
+      "metadata": {
+        "id": "YyhRr0Jiw1qj"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# [1] Standard numpy-like indexing and slicing\n",
+        "tensor = torch.ones(4, 4)\n",
+        "print(tensor)\n",
+        "print(f\"First row : {tensor[0]}\")\n",
+        "print(f\"First column : {tensor[:, 0]}\")\n",
+        "print(f\"Last column : {tensor[..., -1]}\")\n",
+        "tensor[:, 1] = 0\n",
+        "print(tensor)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "8GYc8EfQw7IL",
+        "outputId": "802f43da-7214-4e57-f098-11b384512634"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([[1., 1., 1., 1.],\n",
+            "        [1., 1., 1., 1.],\n",
+            "        [1., 1., 1., 1.],\n",
+            "        [1., 1., 1., 1.]])\n",
+            "First row : tensor([1., 1., 1., 1.])\n",
+            "First column : tensor([1., 1., 1., 1.])\n",
+            "Last column : tensor([1., 1., 1., 1.])\n",
+            "tensor([[1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# [2] Joining tensors;  You can use torch.cat to concatenate a sequence of tensors along a given dimension\n",
+        "t1 = torch.cat([tensor, tensor, tensor], dim = 1)\n",
+        "t2 = torch.cat([tensor, tensor, tensor], dim= -2)\n",
+        "t3 = torch.cat([tensor, tensor, tensor], dim= -1)\n",
+        "print(tensor,\"\\n\", t1, \"\\n\", t2, \"\\n\", t3)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UP_MyZ4oygwQ",
+        "outputId": "76d16890-f730-458f-c5a3-81b7bbe9dd1e"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([[1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.]]) \n",
+            " tensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]]) \n",
+            " tensor([[1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.]]) \n",
+            " tensor([[1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1., 1., 0., 1., 1., 1., 0., 1., 1.]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# [3] Arithmetic operations\n",
+        "# This computes the matrix multiplication between two tensors\n",
+        "# ``tensor.T`` returns the transpose of a tensor\n",
+        "y1 = tensor @ tensor.T\n",
+        "print(tensor, \"\\n\", y1)\n",
+        "\n",
+        "y2 = tensor.matmul(tensor.T)\n",
+        "print(tensor.T, \"\\n\", y2)\n",
+        "\n",
+        "y3 = torch.rand_like(y1)\n",
+        "torch.matmul(tensor, tensor.T, out=y3)\n",
+        "print(\"This is y3 : \", y3)\n",
+        "\n",
+        "\n",
+        "# # This computes the element-wise product. z1, z2, z3 will have the same value\n",
+        "z1 = tensor * tensor\n",
+        "z2 = tensor.mul(tensor)\n",
+        "z3 = torch.rand_like(tensor)\n",
+        "torch.mul(tensor, tensor, out=z3)\n",
+        "\n",
+        "print(\"THis is Z- \\n\", z1,\"\\n\", z2,\"\\n\", z3)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "dsuu2a2Mxuh3",
+        "outputId": "0cd72e58-8bb1-4885-d7a4-7c7833e5dba1"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([[1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.]]) \n",
+            " tensor([[3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.]])\n",
+            "tensor([[1., 1., 1., 1.],\n",
+            "        [0., 0., 0., 0.],\n",
+            "        [1., 1., 1., 1.],\n",
+            "        [1., 1., 1., 1.]]) \n",
+            " tensor([[3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.]])\n",
+            "This is y3 :  tensor([[3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.],\n",
+            "        [3., 3., 3., 3.]])\n",
+            "THis is Z- \n",
+            " tensor([[1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.]]) \n",
+            " tensor([[1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.]]) \n",
+            " tensor([[1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.],\n",
+            "        [1., 0., 1., 1.]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# [4] Single-element tensors \n",
+        "# If you have a one-element tensor, for example by aggregating all values of a tensor into one value, \n",
+        "# you can convert it to a Python numerical value using item():\n",
+        "agg = tensor.sum()\n",
+        "print(agg)\n",
+        "agg_item = agg.item()\n",
+        "print(agg_item, type(agg_item))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "NuMsDbKu0ItA",
+        "outputId": "a859a8bd-5df0-4ca7-9c57-58b979032952"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor(12.)\n",
+            "12.0 <class 'float'>\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# In-place operations \n",
+        "# Operations that store the result into the operand are called in-place\n",
+        "# They are denoted by a _ suffix. For example: x.copy_(y), x.t_(), will change x.\n",
+        "print(f\"{tensor}\\n\")\n",
+        "tensor.add_(5)\n",
+        "print(tensor)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rOLQvE3r1jkT",
+        "outputId": "f085465f-1053-45f1-c395-d1f1f2b85404"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([[11., 10., 11., 11.],\n",
+            "        [11., 10., 11., 11.],\n",
+            "        [11., 10., 11., 11.],\n",
+            "        [11., 10., 11., 11.]])\n",
+            "\n",
+            "tensor([[16., 15., 16., 16.],\n",
+            "        [16., 15., 16., 16.],\n",
+            "        [16., 15., 16., 16.],\n",
+            "        [16., 15., 16., 16.]])\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "# Bridge with NumPy\n",
+        "> Tensors on the CPU and NumPy arrays can share their underlying memory locations, and changing one will change the other."
+      ],
+      "metadata": {
+        "id": "-RR5QXsC2BZL"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Tensor to Numpy array\n",
+        "t = torch.ones(5)\n",
+        "n = t.numpy()\n",
+        "print(t,\"\\n\", n)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "89nvOGDF2r68",
+        "outputId": "ddfa4abb-167c-4508-94ad-f91880ef3fcc"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([1., 1., 1., 1., 1.]) \n",
+            " [1. 1. 1. 1. 1.]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# A change in the tensor reflects in the NumPy array.\n",
+        "t.add_(1)\n",
+        "print(t,\"\\n\", n)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "O1-bXVFX2u14",
+        "outputId": "92cc954b-ccb8-451f-f4fd-114e9b1a0629"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([3., 3., 3., 3., 3.]) \n",
+            " [3. 3. 3. 3. 3.]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# NumPy array to Tensor\n",
+        "n = np.ones(5)\n",
+        "t = torch.from_numpy(n)\n",
+        "print(n,\"\\n\", t)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "91Rh_J9p28QS",
+        "outputId": "2b3ee2eb-15ab-45dd-d0c2-0d3f4d0a0a2d"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[1. 1. 1. 1. 1.] \n",
+            " tensor([1., 1., 1., 1., 1.], dtype=torch.float64)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Changes in the NumPy array reflects in the tensor.\n",
+        "np.add(n, 1, out=n)\n",
+        "print(t,\"\\n\", n)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "2TO61RRG3Eh-",
+        "outputId": "d40e1b78-78b6-446d-dac4-fa2ed32e3b04"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "tensor([4., 4., 4., 4., 4.]) \n",
+            " [4. 4. 4. 4. 4.]\n"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "accelerator": "GPU",
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPJF96wjaTcXS4otjwHSmH3",
+      "include_colab_link": true
+    },
+    "gpuClass": "standard",
+    "kernelspec": {
+      "display_name": "Python 3",
+      "name": "python3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
